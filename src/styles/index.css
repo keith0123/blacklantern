@@ -1,0 +1,11 @@
+.body{
+display: flex;
+background-color: red;
+}
+.game{
+display: flex;
+}
+.content{
+position: absolute;
+color: white;
+}
