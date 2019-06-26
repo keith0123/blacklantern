@@ -3,10 +3,12 @@ import logoImg from "./assets/logo.png";
 import './styles/index.css';
 
 const config = {
+  gameTitle: "Keith Leon",
   type: Phaser.AUTO,
-  parent: "phaser-example",
+  parent: "game",
   width: 800,
   height: 600,
+  autoCenter: true,
   scene: {
     preload: preload,
     create: create
@@ -30,4 +32,10 @@ function create() {
     yoyo: true,
     loop: -1
   });
+
+  // Create Text Overlay
+  const contentBoxOverlay = document.createElement("div");
+  contentBoxOverlay.setAttribute("class", "content-box_overlay");
+  contentBoxOverlay.innerHTML = "Keith Leon";
+  document.getElementById("game").appendChild(contentBoxOverlay);
 }

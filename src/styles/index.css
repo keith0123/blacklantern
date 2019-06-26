@@ -1,11 +1,30 @@
-.body{
-display: flex;
-background-color: red;
+body, html{
+    height: 100%;
+    z-index: 1;
+    margin:0;
+    padding:0;
 }
-.game{
-display: flex;
+
+.content-box{
+    z-index: 1;
+    height: 100%;
 }
-.content{
-position: absolute;
-color: white;
+
+.content-box_game{
+    height: 100%;
+    z-index: -10;
+}
+
+canvas{
+    z-index: -10;
+    position: fixed;
+}
+
+.content-box_overlay{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    height: 100%;
+    z-index: 2;
 }
