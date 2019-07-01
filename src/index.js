@@ -1,15 +1,10 @@
 import Phaser from "phaser";
-import bg from "./assets/bg.png"
-import bg_n from "./assets/bg_n.png"
-import sprites from "./assets/sprites.png"
-import sprites_n from "./assets/sprites_n.png"
-import spritesJSON from "./assets/sprites.json"
-import ground_png from "./assets/ground.png"
 import './styles/index.css';
 
 const config = {
   title: "Keith Leon",
   banner: false,
+  pixelArt: true,
   backgroundColor: 0xffffff,
   type: Phaser.AUTO,
   parent: "game",
@@ -33,33 +28,46 @@ const config = {
 var player;
 var ground;
 var cursors;
+var light;
+var ellipse;
 
 const game = new Phaser.Game(config);
 
 function preload() {
 
-  // this.load.path = ('./assets/');
-  this.load.image("bg", [bg,bg_n]);
-  this.load.atlas('player', sprites, spritesJSON);
-  this.load.image('ground', ground_png)
+  this.load.path = ('./assets/');
+  this.load.image("bg", ['bg.png','bg_n.png']);
+  this.load.multiatlas('player', 'sprites.json');
+  this.load.image('ground', 'ground.png')
 }
 
 function create() {
+
   // Lights
   this.lights.enable().setAmbientColor(0x000000);
-  var light = this.lights.addLight(400, 300, 200).setColor(0xffffff).setIntensity(10);
+  light = this.lights.addLight(400, 300, 200).setColor(0xffffff).setIntensity(10);
+  ellipse = new Phaser.Geom.Ellipse(light.x, light.y, 20, 20);
+
+  // Flicker Effect
+  this.time.addEvent({
+    delay: 250,
+    callback: function ()
+    {
+        Phaser.Geom.Ellipse.Random(ellipse, light);
+    },
+    callbackScope: this,
+    repeat: -1
+  });
 
   // Background
   const bg = this.add.image(400, 300, "bg");
   bg.setPipeline('Light2D');
 
   // Ground
-  ground = this.physics.add.staticGroup();
-  ground.create(400, 300, 'ground');
+  ground = this.physics.add.staticSprite(400, 400, 'ground');
 
   // Player
-  player = this.physics.add.sprite(400, 400, 'player');
-  player.setBounce(0.2);
+  player = this.physics.add.sprite(400, 354, 'player');
   player.setCollideWorldBounds(true);
   cursors = this.input.keyboard.createCursorKeys();
   // player.setPipeline('Light2D');
@@ -71,20 +79,20 @@ function create() {
     frames: this.anims.generateFrameNames('player', {prefix:'sprite', start: 72, end: 77}),
     frameRate: 10,
     repeat: -1
-});
+  });
 
-this.anims.create({
+  this.anims.create({
     key: 'turn',
     frames: this.anims.generateFrameNames('player', {prefix:'sprite', start: 1}),
     frameRate: 20
-});
+  });
 
-this.anims.create({
+  this.anims.create({
     key: 'right',
-    frames: this.anims.generateFrameNames('player', {prefix:'sprite', start: 78, end: 82}),
+    frames: this.anims.generateFrameNames('player', {prefix:'sprite', start: 78, end: 83}),
     frameRate: 10,
     repeat: -1
-});
+  });
 
   // Text Overlay
   const contentBoxOverlay = document.createElement("div");
@@ -94,6 +102,12 @@ this.anims.create({
 }
 
 function update(){
+
+  // "Attach" light to player
+  ellipse.x = player.x - 5;
+  ellipse.y = player.y -70;
+
+  // controls event handlers
   if (cursors.left.isDown)
   {
       player.setVelocityX(-160);
@@ -112,6 +126,6 @@ function update(){
   
   if (cursors.up.isDown && player.body.touching.down)
   {
-      player.setVelocityY(-330);
+      player.setVelocityY(-120);
   }
 }
