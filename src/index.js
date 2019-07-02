@@ -1,15 +1,13 @@
 import Phaser from "phaser";
-import './styles/index.css';
+import './styles/index.scss';
 
 const config = {
   title: "Keith Leon",
   banner: false,
   pixelArt: true,
-  backgroundColor: 0xffffff,
+  backgroundColor: 0x000000,
   type: Phaser.AUTO,
   parent: "game",
-  width: 800,
-  height: 600,
   physics: {
     default: 'arcade',
     arcade: {
@@ -17,7 +15,14 @@ const config = {
         debug: false
     }
   },
-  autoCenter: true,
+  autoCenter: true, 
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+    parent: 'game',
+    width: '100%',
+    height: 600
+  },
   scene: {
     preload: preload,
     create: create,
@@ -28,6 +33,8 @@ const config = {
 var player;
 var ground;
 var cursors;
+var leftKey;
+var rightKey;
 var light;
 var ellipse;
 
@@ -45,8 +52,8 @@ function create() {
 
   // Lights
   this.lights.enable().setAmbientColor(0x000000);
-  light = this.lights.addLight(400, 300, 200).setColor(0xffffff).setIntensity(10);
-  ellipse = new Phaser.Geom.Ellipse(light.x, light.y, 20, 20);
+  light = this.lights.addLight(game.scale.height/2, game.scale.width/2, Math.max((game.scale.width/10), 150)).setColor(0xffffff).setIntensity(10);
+  ellipse = new Phaser.Geom.Ellipse(light.x, light.y, 15, 15);
 
   // Flicker Effect
   this.time.addEvent({
@@ -60,18 +67,25 @@ function create() {
   });
 
   // Background
-  const bg = this.add.image(400, 300, "bg");
+  const bg = this.add.image(game.scale.width/2, game.scale.height/2, "bg");
+  bg.displayWidth = game.scale.width;
   bg.setPipeline('Light2D');
 
   // Ground
-  ground = this.physics.add.staticSprite(400, 400, 'ground');
+  ground = this.physics.add.staticSprite(game.scale.width/2, game.scale.height/1.45, 'ground');
+  ground.displayWidth = game.scale.width;
+  ground.refreshBody();
 
   // Player
-  player = this.physics.add.sprite(400, 354, 'player');
+  player = this.physics.add.sprite(game.scale.width/2, game.scale.height/1.57, 'player');
   player.setCollideWorldBounds(true);
-  cursors = this.input.keyboard.createCursorKeys();
   // player.setPipeline('Light2D');
   this.physics.add.collider(player, ground);
+
+  // Controls
+  cursors = this.input.keyboard.createCursorKeys();
+  leftKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+  rightKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
 
   // Animations
   this.anims.create({
@@ -103,29 +117,47 @@ function create() {
 
 function update(){
 
+  // Controls event handlers
   // "Attach" light to player
-  ellipse.x = player.x - 5;
-  ellipse.y = player.y -70;
-
-  // controls event handlers
   if (cursors.left.isDown)
   {
-      player.setVelocityX(-160);
-      player.anims.play('left', true);
+    ellipse.x = player.x - 20;
+    ellipse.y = player.y - 70;
+
+    player.setVelocityX(-160);
+    player.anims.play('left', true);
   }
   else if (cursors.right.isDown)
   {
-      player.setVelocityX(160);
-      player.anims.play('right', true);
+    ellipse.x = player.x + 20;
+    ellipse.y = player.y - 70;
+
+    player.setVelocityX(160);
+    player.anims.play('right', true);
   }
   else
   {
-      player.setVelocityX(0);
-      player.anims.play('turn', true);
+    ellipse.x = player.x - 5;
+    ellipse.y = player.y - 70;
+
+    player.setVelocityX(0);
+    player.anims.play('turn', true);
   }
   
   if (cursors.up.isDown && player.body.touching.down)
   {
-      player.setVelocityY(-120);
+    player.setVelocityY(-120);
+  }
+
+  // Force Light position ahead of player when they move
+  if(Phaser.Input.Keyboard.JustDown(leftKey))
+  {
+    light.x = player.x - 20;
+    light.y = player.y - 70;
+  }
+  else if(Phaser.Input.Keyboard.JustDown(rightKey))
+  {
+    light.x = player.x + 20;
+    light.y = player.y - 70;
   }
 }
