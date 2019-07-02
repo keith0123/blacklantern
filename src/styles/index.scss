@@ -1,9 +1,14 @@
 @mixin for-phone-only {
     @media (max-width: 599px) { @content; }
 }
-
-@mixin for-tablet-up {
+@mixin for-tablet-up-portrait-up {
     @media (min-width: 600px) { @content; }
+}
+@mixin for-tablet-landscape-up {
+    @media (min-width: 900px) { @content; }
+} 
+@mixin for-desktop-up {
+    @media (min-width: 1200px) { @content; }
 }
 
 body, html{
@@ -39,10 +44,15 @@ canvas{
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 
     @include for-phone-only {
-        font-size: 11vw;
+        font-size: 12vw;
     }
-
-    @include for-tablet-up {
+    @include for-tablet-up-portrait-up {
+        font-size: 6vw;
+    }
+    @include for-tablet-landscape-up {
+        font-size: 4.5vw;
+    }
+    @include for-desktop-up {
         font-size: 3vw;
     }
 }
