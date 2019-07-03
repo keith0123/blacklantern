@@ -10,6 +10,9 @@
 @mixin for-tablet-up-portrait-up {
     @media (min-width: 600px) { @content; }
 }
+@mixin for-phone-landscape-up {
+    @media (min-width: 700px) { @content; }
+}
 @mixin for-tablet-landscape-up {
     @media (min-width: 900px) { @content; }
 } 
@@ -19,19 +22,16 @@
 
 body, html{
     height: 100%;
-    z-index: 1;
     margin:0;
     padding:0;
 }
 
 .content-box{
-    z-index: 1;
     height: 100%;
 }
 
 .content-box_game{
     height: 100%;
-    z-index: -10;
 }
 
 canvas{
@@ -46,7 +46,6 @@ canvas{
     flex-direction: column;
     color: white;
     height: 100%;
-    z-index: 2;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 
     @include for-phone-portrait {
@@ -61,11 +60,14 @@ canvas{
     @include for-tablet-up-portrait-up {
         font-size: 6vw;
     }
+    @include for-phone-landscape-up {
+        font-size: 5vw;
+    }
     @include for-tablet-landscape-up {
         font-size: 4.5vw;
     }
     @include for-desktop-up {
-        font-size: 3vw;
+        font-size: 2.5vw;
     }
 }
 
@@ -74,5 +76,23 @@ canvas{
 }
 
 .nameText{
-    padding-bottom: 25px;
+
+    @include for-phone-portrait {
+        padding-bottom: 70px;
+    }
+    @include for-phone-portrait-up {
+        padding-bottom: 25px;
+    }
+    @include for-phone-landscape  {
+        padding-bottom: 70px;
+    }
+    @include for-tablet-up-portrait-up {
+        padding-bottom: 70px;
+    }
+    @include for-phone-landscape-up {
+        padding-bottom: 100px;
+    }
+    @include for-desktop-up {
+        padding-bottom: 90px;
+    }
 }

@@ -36,7 +36,8 @@ const config = {
 var player;
 var ground;
 var cursors;
-var light;
+var wasd;
+var neglight;
 var ellipse;
 var flickerTimer;
 
@@ -45,28 +46,24 @@ const game = new Phaser.Game(config);
 function preload() {
 
   this.load.path = ('./assets/');
-  this.load.image("light", 'neg-light.png')
+  this.load.image("neglight", 'neg-light.png')
   this.load.multiatlas('player', 'sprites.json');
   this.load.image('ground', 'ground.png')
 }
 
 function create() {
 
-  // Light
-  light = this.add.image(game.scale.width/2, game.scale.height/1.63, 'light');
-  light.displayWidth = Math.max((game.scale.width/5.5), 240);
-  light.displayHeight = light.displayWidth;
+  // Negative Light
+  neglight = this.add.image(game.scale.width/2, game.scale.height/1.63, 'neglight');
+  // neglight.displayWidth = Math.max((game.scale.width/5.5), 240);
 
   // Ground
   if(window.matchMedia("(max-height: 399px)").matches){
     ground = this.physics.add.staticSprite(game.scale.width/2, game.scale.height/1.33, 'ground');
-    console.log('< 400')
   }else if(window.matchMedia("(max-height: 799px)").matches){
     ground = this.physics.add.staticSprite(game.scale.width/2, game.scale.height/1.5, 'ground');
-    console.log('400')
   }else if(window.matchMedia("(max-height: 1199px)").matches){
     ground = this.physics.add.staticSprite(game.scale.width/2, game.scale.height/1.65, 'ground');
-    console.log('800')
   }else if(window.matchMedia("(min-height: 1200px)").matches){
     ground = this.physics.add.staticSprite(game.scale.width/2, game.scale.height/2, 'ground');
   }
@@ -75,26 +72,26 @@ function create() {
   ground.refreshBody();
 
   // Player
-  if(window.matchMedia("(max-height: 399px)").matches){
-    player = this.physics.add.sprite(game.scale.width/2, game.scale.height/1.42, 'player');
-  }else if(window.matchMedia("(max-height: 799px)").matches){
-    player = this.physics.add.sprite(game.scale.width/2, game.scale.height/1.65, 'player');
-  }else if(window.matchMedia("(max-height: 1199px)").matches){
-    player = this.physics.add.sprite(game.scale.width/2, game.scale.height/1.75, 'player');
-  }else if(window.matchMedia("(min-height: 1200px)").matches){
-    player = this.physics.add.sprite(game.scale.width/2, game.scale.height/2, 'player');
-  }
-
+  player = this.physics.add.sprite(game.scale.width/2, (ground.y-20), 'player');
   player.setCollideWorldBounds(true);
   this.physics.add.collider(player, ground);
 
+  // Scale Negative Light to Player Sprite
+  neglight.displayWidth = (player.height * 9);
+  neglight.displayHeight = neglight.displayWidth;
+
+  // // Lighting
+  // player.setPipeline('Light2D');
+  // this.lights.enable().setAmbientColor(0xffffff);
+  // var lamp = this.lights.addLight(neglight.x, neglight.y, 200).setColor(0xffffff).setIntensity(5);
+
   // Flicker Effect
-  ellipse = new Phaser.Geom.Ellipse(light.x, light.y, 5, 5);
+  ellipse = new Phaser.Geom.Ellipse(neglight.x, neglight.y, 5, 5);
   flickerTimer = this.time.addEvent({
     delay: 300,
     callback: function ()
     {
-        Phaser.Geom.Ellipse.Random(ellipse, light);
+        Phaser.Geom.Ellipse.Random(ellipse, neglight);
     },
     callbackScope: this,
     repeat: -1
@@ -103,11 +100,14 @@ function create() {
   // Controls
   cursors = this.input.keyboard.createCursorKeys();
 
-  // this.input.on('pointermove', function(pointer){
-  //   console.log('test')
-  // })
+  wasd = {
+    'w': this.input.keyboard.addKey('W'),
+    'a': this.input.keyboard.addKey('A'),
+    's': this.input.keyboard.addKey('S'),
+    'd': this.input.keyboard.addKey('D')
+  }
 
-  // this.input.on('pointerdown', function(pointer){
+  // this.input.on(Phaser.Input.Events.POINTER_MOVE, function(pointer){
   //   console.log('test')
   // })
 
@@ -173,25 +173,23 @@ function create() {
 function update(){
 
   // Controls event handlers
-  // "Attach" light to player
-  if (cursors.left.isDown)
+  // "Attach" neglight to player
+  if (cursors.left.isDown ||  wasd.a.isDown)
   {
-
     flickerTimer.paused = true;
 
-    light.x = player.x - 20;
-    light.y = player.y - 70;
+    neglight.x = player.x - 20;
+    neglight.y = player.y - 70;
 
     player.setVelocityX(-160);
     player.anims.play('left', true);
   }
-  else if (cursors.right.isDown)
+  else if (cursors.right.isDown || wasd.d.isDown)
   {
-
     flickerTimer.paused = true;
 
-    light.x = player.x + 20;
-    light.y = player.y - 70;
+    neglight.x = player.x + 20;
+    neglight.y = player.y - 70;
 
     player.setVelocityX(160);
     player.anims.play('right', true);
@@ -207,7 +205,7 @@ function update(){
     player.anims.play('turn', true);
   }
   
-  if (cursors.up.isDown && player.body.touching.down)
+  if ((cursors.up.isDown || wasd.w.isDown) && player.body.touching.down)
   {
     flickerTimer.paused = true;
 
@@ -218,6 +216,6 @@ function update(){
   {
     flickerTimer.paused = true;
 
-    light.y = player.y - 70;
+    neglight.y = player.y - 70;
   }
 }
