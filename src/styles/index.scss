@@ -1,5 +1,11 @@
-@mixin for-phone-only {
-    @media (max-width: 599px) { @content; }
+@mixin for-phone-portrait {
+    @media (max-width: 399px) { @content; }
+}
+@mixin for-phone-portrait-up {
+    @media (min-width: 400px) { @content; }
+}
+@mixin for-phone-landscape {
+    @media (min-width: 499px) { @content; }
 }
 @mixin for-tablet-up-portrait-up {
     @media (min-width: 600px) { @content; }
@@ -31,20 +37,26 @@ body, html{
 canvas{
     z-index: -10;
     position: fixed;
-    filter: invert(100%);
 }
 
 .content-box_overlay{
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     color: white;
     height: 100%;
     z-index: 2;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 
-    @include for-phone-only {
-        font-size: 12vw;
+    @include for-phone-portrait {
+        font-size: 10vw;
+    }
+    @include for-phone-portrait-up {
+        font-size: 9vw;
+    }
+    @include for-phone-landscape  {
+        font-size: 7vw;
     }
     @include for-tablet-up-portrait-up {
         font-size: 6vw;
@@ -55,4 +67,12 @@ canvas{
     @include for-desktop-up {
         font-size: 3vw;
     }
+}
+
+.icon_overlay a{
+    padding: 10px;
+}
+
+.nameText{
+    padding-bottom: 25px;
 }

@@ -3,9 +3,9 @@ import './styles/index.scss';
 
 const config = {
   title: "Keith Leon",
-  banner: true,
+  banner: false,
   pixelArt: true,
-  backgroundColor: 0x000000,
+  backgroundColor: 0xffffff,
   type: Phaser.AUTO,
   parent: "game",
   physics: {
@@ -21,47 +21,75 @@ const config = {
     autoCenter: Phaser.Scale.CENTER_BOTH,
     parent: 'game',
     width: '100%',
-    height: 600
+    height: '100%'
   },
   scene: {
     preload: preload,
     create: create,
     update: update
+  },
+  audio: {
+    noAudio: true
   }
 };
 
 var player;
 var ground;
 var cursors;
-var pointer;
-var leftKey;
-var rightKey;
-var upKey;
-var touchX
-var touchY
 var light;
 var ellipse;
 var flickerTimer;
-var gameStarted = false;
 
 const game = new Phaser.Game(config);
 
 function preload() {
 
   this.load.path = ('./assets/');
-  this.load.image("bg", ['bg.png','bg_n.png']);
+  this.load.image("light", 'neg-light.png')
   this.load.multiatlas('player', 'sprites.json');
   this.load.image('ground', 'ground.png')
 }
 
 function create() {
 
-  // Lights
-  this.lights.enable().setAmbientColor(0x000000);
-  light = this.lights.addLight(game.scale.height/2, game.scale.width/2, Math.max((game.scale.width/10), 150)).setColor(0xffffff).setIntensity(10);
-  ellipse = new Phaser.Geom.Ellipse(light.x, light.y, 5, 5);
+  // Light
+  light = this.add.image(game.scale.width/2, game.scale.height/1.63, 'light');
+  light.displayWidth = Math.max((game.scale.width/5.5), 240);
+  light.displayHeight = light.displayWidth;
+
+  // Ground
+  if(window.matchMedia("(max-height: 399px)").matches){
+    ground = this.physics.add.staticSprite(game.scale.width/2, game.scale.height/1.33, 'ground');
+    console.log('< 400')
+  }else if(window.matchMedia("(max-height: 799px)").matches){
+    ground = this.physics.add.staticSprite(game.scale.width/2, game.scale.height/1.5, 'ground');
+    console.log('400')
+  }else if(window.matchMedia("(max-height: 1199px)").matches){
+    ground = this.physics.add.staticSprite(game.scale.width/2, game.scale.height/1.65, 'ground');
+    console.log('800')
+  }else if(window.matchMedia("(min-height: 1200px)").matches){
+    ground = this.physics.add.staticSprite(game.scale.width/2, game.scale.height/2, 'ground');
+  }
+
+  ground.displayWidth = game.scale.width;
+  ground.refreshBody();
+
+  // Player
+  if(window.matchMedia("(max-height: 399px)").matches){
+    player = this.physics.add.sprite(game.scale.width/2, game.scale.height/1.42, 'player');
+  }else if(window.matchMedia("(max-height: 799px)").matches){
+    player = this.physics.add.sprite(game.scale.width/2, game.scale.height/1.65, 'player');
+  }else if(window.matchMedia("(max-height: 1199px)").matches){
+    player = this.physics.add.sprite(game.scale.width/2, game.scale.height/1.75, 'player');
+  }else if(window.matchMedia("(min-height: 1200px)").matches){
+    player = this.physics.add.sprite(game.scale.width/2, game.scale.height/2, 'player');
+  }
+
+  player.setCollideWorldBounds(true);
+  this.physics.add.collider(player, ground);
 
   // Flicker Effect
+  ellipse = new Phaser.Geom.Ellipse(light.x, light.y, 5, 5);
   flickerTimer = this.time.addEvent({
     delay: 300,
     callback: function ()
@@ -72,36 +100,16 @@ function create() {
     repeat: -1
   });
 
-  // Delay on floor check to avoid phaser bug
-  this.time.addEvent({
-    delay: 15,
-    callback: function ()
-    {
-        gameStarted = true;
-    },
-    callbackScope: this,
-  });
-
-  // Background
-  const bg = this.add.image(game.scale.width/2, game.scale.height/2, "bg");
-  bg.displayWidth = game.scale.width;
-  bg.setPipeline('Light2D');
-
-  // Ground
-  ground = this.physics.add.staticSprite(game.scale.width/2, game.scale.height/1.452, 'ground');
-  ground.displayWidth = game.scale.width;
-  ground.refreshBody();
-
-  // Player
-  player = this.physics.add.sprite(game.scale.width/2, game.scale.height/1.57, 'player');
-  player.setCollideWorldBounds(true);
-  this.physics.add.collider(player, ground);
-
   // Controls
   cursors = this.input.keyboard.createCursorKeys();
-  leftKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
-  rightKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
-  upKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+
+  // this.input.on('pointermove', function(pointer){
+  //   console.log('test')
+  // })
+
+  // this.input.on('pointerdown', function(pointer){
+  //   console.log('test')
+  // })
 
   // Animations
   this.anims.create({
@@ -124,10 +132,41 @@ function create() {
     repeat: -1
   });
 
-  // Text Overlay
+  // HTML Overlay
+  const gitLink = document.createElement('a');
+  gitLink.setAttribute('href', 'https://github.com/keithleon');
+  const gitImg = document.createElement('img');
+  gitImg.setAttribute('src', 'assets/github-logo.png');
+  gitLink.appendChild(gitImg);
+
+  const linkdenLink = document.createElement('a');
+  linkdenLink.setAttribute('href', 'https://www.linkedin.com/in/keith-leon/');
+  const linkdenImg = document.createElement('img');
+  linkdenImg.setAttribute('src', 'assets/linkedin-logo.png');
+  linkdenLink.appendChild(linkdenImg);
+
+  const envelLink = document.createElement('a');
+  envelLink.setAttribute('href', 'mailto:keithileon@gmail.com');
+  const envelImg = document.createElement('img');
+  envelImg.setAttribute('src', 'assets/envelope.png');
+  envelLink.appendChild(envelImg);
+
+  const iconOverlay = document.createElement("div");
+  iconOverlay.setAttribute("class", "icon_overlay");
+
+  iconOverlay.appendChild(linkdenLink);
+  iconOverlay.appendChild(gitLink);
+  iconOverlay.appendChild(envelLink);
+
   const contentBoxOverlay = document.createElement("div");
   contentBoxOverlay.setAttribute("class", "content-box_overlay");
-  contentBoxOverlay.innerHTML = "Keith Leon";
+
+  const nameText = document.createElement('div')
+  nameText.setAttribute('class', 'nameText');
+  nameText.innerHTML ="Keith Leon";
+
+  contentBoxOverlay.appendChild(iconOverlay);
+  contentBoxOverlay.appendChild(nameText);
   document.getElementById("game").appendChild(contentBoxOverlay);
 }
 
@@ -175,7 +214,7 @@ function update(){
     player.setVelocityY(-120);
   }
 
-  if(!player.body.touching.down && gameStarted)
+  if(!player.body.touching.down)
   {
     flickerTimer.paused = true;
 
