@@ -1,25 +1,3 @@
-@mixin for-phone-portrait {
-    @media (max-width: 399px) { @content; }
-}
-@mixin for-phone-portrait-up {
-    @media (min-width: 400px) { @content; }
-}
-@mixin for-phone-landscape {
-    @media (min-width: 499px) { @content; }
-}
-@mixin for-tablet-up-portrait-up {
-    @media (min-width: 600px) { @content; }
-}
-@mixin for-phone-landscape-up {
-    @media (min-width: 700px) { @content; }
-}
-@mixin for-tablet-landscape-up {
-    @media (min-width: 900px) { @content; }
-} 
-@mixin for-desktop-up {
-    @media (min-width: 1200px) { @content; }
-}
-
 body, html{
     height: 100%;
     margin:0;
@@ -35,64 +13,5 @@ body, html{
 }
 
 canvas{
-    z-index: -10;
     position: fixed;
-}
-
-.content-box_overlay{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    color: white;
-    height: 100%;
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-
-    @include for-phone-portrait {
-        font-size: 10vw;
-    }
-    @include for-phone-portrait-up {
-        font-size: 9vw;
-    }
-    @include for-phone-landscape  {
-        font-size: 7vw;
-    }
-    @include for-tablet-up-portrait-up {
-        font-size: 6vw;
-    }
-    @include for-phone-landscape-up {
-        font-size: 5vw;
-    }
-    @include for-tablet-landscape-up {
-        font-size: 4.5vw;
-    }
-    @include for-desktop-up {
-        font-size: 2.5vw;
-    }
-}
-
-.icon_overlay a{
-    padding: 10px;
-}
-
-.nameText{
-
-    @include for-phone-portrait {
-        padding-bottom: 70px;
-    }
-    @include for-phone-portrait-up {
-        padding-bottom: 25px;
-    }
-    @include for-phone-landscape  {
-        padding-bottom: 70px;
-    }
-    @include for-tablet-up-portrait-up {
-        padding-bottom: 70px;
-    }
-    @include for-phone-landscape-up {
-        padding-bottom: 100px;
-    }
-    @include for-desktop-up {
-        padding-bottom: 90px;
-    }
 }

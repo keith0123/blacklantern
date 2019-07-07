@@ -8,6 +8,7 @@ const config = {
   backgroundColor: 0xffffff,
   type: Phaser.AUTO,
   parent: "game",
+  disableContextMenu: true,
   physics: {
     default: 'arcade',
     arcade: {
@@ -46,17 +47,19 @@ const game = new Phaser.Game(config);
 function preload() {
 
   this.load.path = ('./assets/');
-  this.load.image("neglight", 'neg-light.png')
-  this.load.multiatlas('player', 'sprites.json');
-  this.load.image('ground', 'ground.png')
+  this.load.image('neglight', 'neg-light.png');
+  this.load.image('linkBut', 'linkedin-logo.png');
+  this.load.image('gitBut', 'github-logo.png');
+  this.load.image('envBut', 'envelope.png');
+  this.load.atlas({key: 'player', textureURL: 'sprites.png', atlasURL: 'sprites.json'});
+  this.load.image('ground', 'ground.png');
 }
 
 function create() {
 
   // Negative Light
   neglight = this.add.image(game.scale.width/2, game.scale.height/1.63, 'neglight');
-  // neglight.displayWidth = Math.max((game.scale.width/5.5), 240);
-
+    
   // Ground
   if(window.matchMedia("(max-height: 399px)").matches){
     ground = this.physics.add.staticSprite(game.scale.width/2, game.scale.height/1.33, 'ground');
@@ -80,11 +83,6 @@ function create() {
   neglight.displayWidth = (player.height * 9);
   neglight.displayHeight = neglight.displayWidth;
 
-  // // Lighting
-  // player.setPipeline('Light2D');
-  // this.lights.enable().setAmbientColor(0xffffff);
-  // var lamp = this.lights.addLight(neglight.x, neglight.y, 200).setColor(0xffffff).setIntensity(5);
-
   // Flicker Effect
   ellipse = new Phaser.Geom.Ellipse(neglight.x, neglight.y, 5, 5);
   flickerTimer = this.time.addEvent({
@@ -107,10 +105,6 @@ function create() {
     'd': this.input.keyboard.addKey('D')
   }
 
-  // this.input.on(Phaser.Input.Events.POINTER_MOVE, function(pointer){
-  //   console.log('test')
-  // })
-
   // Animations
   this.anims.create({
     key: 'left',
@@ -132,49 +126,52 @@ function create() {
     repeat: -1
   });
 
-  // HTML Overlay
-  const gitLink = document.createElement('a');
-  gitLink.setAttribute('href', 'https://github.com/keithleon');
-  const gitImg = document.createElement('img');
-  gitImg.setAttribute('src', 'assets/github-logo.png');
-  gitLink.appendChild(gitImg);
+  // Text and Buttons
+  const nameText = this.add.text((player.x - 110), (player.y - 100), "Keith Leon", 
+  { fontFamily: 'Cambria, Cochin, Georgia, Times, "Times New Roman", serif', 
+  color: '#ffffff',
+  fontSize: '45px' 
+  })
 
-  const linkdenLink = document.createElement('a');
-  linkdenLink.setAttribute('href', 'https://www.linkedin.com/in/keith-leon/');
-  const linkdenImg = document.createElement('img');
-  linkdenImg.setAttribute('src', 'assets/linkedin-logo.png');
-  linkdenLink.appendChild(linkdenImg);
+  const gitBut = this.add.image((nameText.x + (nameText.width / 2)), (nameText.y - 20), 'gitBut');
+  gitBut.setInteractive({ useHandCursor: true })
+  .on('pointerdown', (pointer) =>{
+    if(!pointer.rightButtonDown())
+      window.location.href = 'https://github.com/keithleon';
+  })
 
-  const envelLink = document.createElement('a');
-  envelLink.setAttribute('href', 'mailto:keithileon@gmail.com');
-  const envelImg = document.createElement('img');
-  envelImg.setAttribute('src', 'assets/envelope.png');
-  envelLink.appendChild(envelImg);
+  const linkBut = this.add.image(gitBut.x - 40, (nameText.y - 20), 'linkBut');
+  linkBut.setInteractive({ useHandCursor: true })
+  .on('pointerdown', (pointer) =>{
+    if(!pointer.rightButtonDown())
+      window.location.href = 'https://www.linkedin.com/in/keith-leon/';
+  })
 
-  const iconOverlay = document.createElement("div");
-  iconOverlay.setAttribute("class", "icon_overlay");
-
-  iconOverlay.appendChild(linkdenLink);
-  iconOverlay.appendChild(gitLink);
-  iconOverlay.appendChild(envelLink);
-
-  const contentBoxOverlay = document.createElement("div");
-  contentBoxOverlay.setAttribute("class", "content-box_overlay");
-
-  const nameText = document.createElement('div')
-  nameText.setAttribute('class', 'nameText');
-  nameText.innerHTML ="Keith Leon";
-
-  contentBoxOverlay.appendChild(iconOverlay);
-  contentBoxOverlay.appendChild(nameText);
-  document.getElementById("game").appendChild(contentBoxOverlay);
+  const envBut = this.add.image(gitBut.x + 40, (nameText.y - 20), 'envBut');
+  envBut.setInteractive({ useHandCursor: true })
+  .on('pointerdown', (pointer) =>{
+    if(!pointer.rightButtonDown())
+      window.location.href = 'mailto:keithileon@gmail.com';
+  })
 }
 
 function update(){
 
+  var deadZone = [player.x-20, player.x+20];
+
+  var pointerAngle  = Phaser.Math.RadToDeg(Phaser.Math.Angle.Between(this.input.activePointer.x, this.input.activePointer.y, player.x, player.y));
+
+  if(pointerAngle >= 45 && pointerAngle <= 145){
+    var shouldJump = true;
+  }else{
+    var shouldJump = false;
+  }
+
   // Controls event handlers
   // "Attach" neglight to player
-  if (cursors.left.isDown ||  wasd.a.isDown)
+  if (cursors.left.isDown ||  wasd.a.isDown || 
+    ((this.input.activePointer.isDown && (this.input.activePointer.x < player.x)) && (this.input.activePointer.x < deadZone[0] || this.input.activePointer.x > deadZone[1]))
+    )
   {
     flickerTimer.paused = true;
 
@@ -184,7 +181,9 @@ function update(){
     player.setVelocityX(-160);
     player.anims.play('left', true);
   }
-  else if (cursors.right.isDown || wasd.d.isDown)
+  else if (cursors.right.isDown || wasd.d.isDown || 
+    ((this.input.activePointer.isDown && (this.input.activePointer.x > player.x)) && (this.input.activePointer.x < deadZone[0] || this.input.activePointer.x > deadZone[1]))
+    )
   {
     flickerTimer.paused = true;
 
@@ -205,7 +204,7 @@ function update(){
     player.anims.play('turn', true);
   }
   
-  if ((cursors.up.isDown || wasd.w.isDown) && player.body.touching.down)
+  if ((cursors.up.isDown || wasd.w.isDown || (this.input.activePointer.isDown && shouldJump && this.input.activePointer.y < player.y - 30)) && player.body.touching.down)
   {
     flickerTimer.paused = true;
 

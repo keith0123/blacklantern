@@ -2,7 +2,6 @@
     "textures":[
         {
             "image":"sprites.png",
-            "normalMap":"sprites_n.png",
             "format": "RGBA8888",
             "size":{"w":512,"h":256},
             "scale":1,
@@ -138,7 +137,7 @@
                     "spriteSourceSize":{"x":0,"y":0,"w":17,"h":32},
                     "sourceSize":{"w":17,"h":32}
                 }
-                ]
+            ]
         }
     ]
 }
