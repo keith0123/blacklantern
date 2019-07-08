@@ -13,7 +13,7 @@ const config = {
     default: 'arcade',
     arcade: {
         gravity: { y: 300 },
-        debug: false
+        debug:false
     }
   },
   autoCenter: true, 
@@ -41,6 +41,9 @@ var wasd;
 var neglight;
 var ellipse;
 var flickerTimer;
+const negLightHeight = 50; // 70
+const nameTextHeight = 50; // 20
+const playerSpawnHeight = 100; // 20
 
 const game = new Phaser.Game(config);
 
@@ -51,7 +54,9 @@ function preload() {
   this.load.image('linkBut', 'linkedin-logo.png');
   this.load.image('gitBut', 'github-logo.png');
   this.load.image('envBut', 'envelope.png');
-  this.load.atlas({key: 'player', textureURL: 'sprites.png', atlasURL: 'sprites.json'});
+  // this.load.atlas({key: 'player', textureURL: 'sprites.png', atlasURL: 'sprites.json'});
+  // this.load.image('player', 'kl_sprite_1.png');
+  this.load.atlas({key: 'player', textureURL: 'kl_spritesheet_1.png', atlasURL: 'kl_spritesheet_1.json'});
   this.load.image('ground', 'ground.png');
 }
 
@@ -75,12 +80,12 @@ function create() {
   ground.refreshBody();
 
   // Player
-  player = this.physics.add.sprite(game.scale.width/2, (ground.y-20), 'player');
+  player = this.physics.add.sprite(game.scale.width/2, (ground.y-playerSpawnHeight), 'player');
   player.setCollideWorldBounds(true);
   this.physics.add.collider(player, ground);
 
   // Scale Negative Light to Player Sprite
-  neglight.displayWidth = (player.height * 9);
+  neglight.displayWidth = (player.width * 10);
   neglight.displayHeight = neglight.displayWidth;
 
   // Flicker Effect
@@ -106,28 +111,35 @@ function create() {
   }
 
   // Animations
-  this.anims.create({
-    key: 'left',
-    frames: this.anims.generateFrameNames('player', {prefix:'sprite', start: 72, end: 77}),
-    frameRate: 10,
-    repeat: -1
-  });
+  // this.anims.create({
+  //   key: 'left',
+  //   frames: this.anims.generateFrameNames('player', {prefix:'sprite', start: 72, end: 77}),
+  //   frameRate: 10,
+  //   repeat: -1
+  // });
+
+  // this.anims.create({
+  //   key: 'turn',
+  //   frames: this.anims.generateFrameNames('player', {prefix:'sprite', start: 1}),
+  //   frameRate: 20
+  // });
+
+  // this.anims.create({
+  //   key: 'right',
+  //   frames: this.anims.generateFrameNames('player', {prefix:'sprite', start: 78, end: 83}),
+  //   frameRate: 10,
+  //   repeat: -1
+  // });
 
   this.anims.create({
-    key: 'turn',
-    frames: this.anims.generateFrameNames('player', {prefix:'sprite', start: 1}),
-    frameRate: 20
-  });
-
-  this.anims.create({
-    key: 'right',
-    frames: this.anims.generateFrameNames('player', {prefix:'sprite', start: 78, end: 83}),
-    frameRate: 10,
+    key: 'idle',
+    frames: this.anims.generateFrameNames('player', {start: 1, end: 4}),
+    frameRate: 2.5,
     repeat: -1
   });
 
   // Text and Buttons
-  const nameText = this.add.text((player.x - 110), (player.y - 100), "Keith Leon", 
+  const nameText = this.add.text((player.x - 110), (player.y - nameTextHeight), "Keith Leon", 
   { fontFamily: 'Cambria, Cochin, Georgia, Times, "Times New Roman", serif', 
   color: '#ffffff',
   fontSize: '45px' 
@@ -176,10 +188,10 @@ function update(){
     flickerTimer.paused = true;
 
     neglight.x = player.x - 20;
-    neglight.y = player.y - 70;
+    neglight.y = player.y - negLightHeight;
 
     player.setVelocityX(-160);
-    player.anims.play('left', true);
+    // player.anims.play('left', true);
   }
   else if (cursors.right.isDown || wasd.d.isDown || 
     ((this.input.activePointer.isDown && (this.input.activePointer.x > player.x)) && (this.input.activePointer.x < deadZone[0] || this.input.activePointer.x > deadZone[1]))
@@ -188,20 +200,21 @@ function update(){
     flickerTimer.paused = true;
 
     neglight.x = player.x + 20;
-    neglight.y = player.y - 70;
+    neglight.y = player.y - negLightHeight;
 
     player.setVelocityX(160);
-    player.anims.play('right', true);
+    // player.anims.play('right', true);
   }
   else
   {
     flickerTimer.paused = false;
 
     ellipse.x = player.x - 5;
-    ellipse.y = player.y - 70;
+    ellipse.y = player.y - negLightHeight;
 
     player.setVelocityX(0);
-    player.anims.play('turn', true);
+    // player.anims.play('turn', true);
+    player.anims.play('idle', true);
   }
   
   if ((cursors.up.isDown || wasd.w.isDown || (this.input.activePointer.isDown && shouldJump && this.input.activePointer.y < player.y - 30)) && player.body.touching.down)
@@ -215,6 +228,6 @@ function update(){
   {
     flickerTimer.paused = true;
 
-    neglight.y = player.y - 70;
+    neglight.y = player.y - negLightHeight;
   }
 }

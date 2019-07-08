@@ -1,0 +1,53 @@
+{ "frames": {
+   "1": {
+    "frame": { "x": 0, "y": 0, "w": 33, "h": 84 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 33, "h": 84 },
+    "sourceSize": { "w": 33, "h": 84 },
+    "duration": 300
+   },
+   "2": {
+    "frame": { "x": 33, "y": 0, "w": 33, "h": 84 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 33, "h": 84 },
+    "sourceSize": { "w": 33, "h": 84 },
+    "duration": 300
+   },
+   "3": {
+    "frame": { "x": 66, "y": 0, "w": 33, "h": 84 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 33, "h": 84 },
+    "sourceSize": { "w": 33, "h": 84 },
+    "duration": 300
+   },
+   "4": {
+    "frame": { "x": 99, "y": 0, "w": 33, "h": 84 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 33, "h": 84 },
+    "sourceSize": { "w": 33, "h": 84 },
+    "duration": 300
+   }
+ },
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.2.13-x64",
+  "image": "kl_spritesheet_1.png",
+  "format": "I8",
+  "size": { "w": 132, "h": 84 },
+  "scale": "1",
+  "frameTags": [
+  ],
+  "layers": [
+   { "name": "base", "opacity": 255, "blendMode": "normal" },
+   { "name": "fire", "opacity": 255, "blendMode": "normal" },
+   { "name": "lamp", "opacity": 255, "blendMode": "normal" },
+   { "name": "hand", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}
