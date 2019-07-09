@@ -55,8 +55,7 @@ function preload() {
   this.load.image('gitBut', 'github-logo.png');
   this.load.image('envBut', 'envelope.png');
   // this.load.atlas({key: 'player', textureURL: 'sprites.png', atlasURL: 'sprites.json'});
-  // this.load.image('player', 'kl_sprite_1.png');
-  this.load.atlas({key: 'player', textureURL: 'kl_spritesheet_1.png', atlasURL: 'kl_spritesheet_1.json'});
+  this.load.atlas({key: 'player', textureURL: 'sprite_idle.png', atlasURL: 'sprite_idle.json'});
   this.load.image('ground', 'ground.png');
 }
 
@@ -133,7 +132,7 @@ function create() {
 
   this.anims.create({
     key: 'idle',
-    frames: this.anims.generateFrameNames('player', {start: 1, end: 4}),
+    frames: this.anims.generateFrameNames('player', {start: 0, end: 5}),
     frameRate: 2.5,
     repeat: -1
   });
