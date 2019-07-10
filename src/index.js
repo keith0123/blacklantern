@@ -13,7 +13,7 @@ const config = {
     default: 'arcade',
     arcade: {
         gravity: { y: 300 },
-        debug:false
+        debug: false
     }
   },
   autoCenter: true, 
@@ -54,8 +54,7 @@ function preload() {
   this.load.image('linkBut', 'linkedin-logo.png');
   this.load.image('gitBut', 'github-logo.png');
   this.load.image('envBut', 'envelope.png');
-  // this.load.atlas({key: 'player', textureURL: 'sprites.png', atlasURL: 'sprites.json'});
-  this.load.atlas({key: 'player', textureURL: 'sprite_idle.png', atlasURL: 'sprite_idle.json'});
+  this.load.atlas({key: 'player', textureURL: 'sprite.png', atlasURL: 'sprite.json'});
   this.load.image('ground', 'ground.png');
 }
 
@@ -82,6 +81,7 @@ function create() {
   player = this.physics.add.sprite(game.scale.width/2, (ground.y-playerSpawnHeight), 'player');
   player.setCollideWorldBounds(true);
   this.physics.add.collider(player, ground);
+  // player.setSize(33, 91)
 
   // Scale Negative Light to Player Sprite
   neglight.displayWidth = (player.width * 10);
@@ -110,29 +110,23 @@ function create() {
   }
 
   // Animations
-  // this.anims.create({
-  //   key: 'left',
-  //   frames: this.anims.generateFrameNames('player', {prefix:'sprite', start: 72, end: 77}),
-  //   frameRate: 10,
-  //   repeat: -1
-  // });
+  this.anims.create({
+    key: 'left',
+    frames: this.anims.generateFrameNames('player', {prefix:'sprite_run_l ', start: 0, end: 5}),
+    frameRate: 10,
+    repeat: -1
+  });
 
-  // this.anims.create({
-  //   key: 'turn',
-  //   frames: this.anims.generateFrameNames('player', {prefix:'sprite', start: 1}),
-  //   frameRate: 20
-  // });
-
-  // this.anims.create({
-  //   key: 'right',
-  //   frames: this.anims.generateFrameNames('player', {prefix:'sprite', start: 78, end: 83}),
-  //   frameRate: 10,
-  //   repeat: -1
-  // });
+  this.anims.create({
+    key: 'right',
+    frames: this.anims.generateFrameNames('player', {prefix:'sprite_run_r ', start: 0, end: 5}),
+    frameRate: 10,
+    repeat: -1
+  });
 
   this.anims.create({
     key: 'idle',
-    frames: this.anims.generateFrameNames('player', {start: 0, end: 5}),
+    frames: this.anims.generateFrameNames('player', {prefix: 'sprite_idle ',start: 0, end: 5}),
     frameRate: 2.5,
     repeat: -1
   });
@@ -190,7 +184,7 @@ function update(){
     neglight.y = player.y - negLightHeight;
 
     player.setVelocityX(-160);
-    // player.anims.play('left', true);
+    player.anims.play('left', true);
   }
   else if (cursors.right.isDown || wasd.d.isDown || 
     ((this.input.activePointer.isDown && (this.input.activePointer.x > player.x)) && (this.input.activePointer.x < deadZone[0] || this.input.activePointer.x > deadZone[1]))
@@ -202,7 +196,7 @@ function update(){
     neglight.y = player.y - negLightHeight;
 
     player.setVelocityX(160);
-    // player.anims.play('right', true);
+    player.anims.play('right', true);
   }
   else
   {
