@@ -41,9 +41,10 @@ var wasd;
 var neglight;
 var ellipse;
 var flickerTimer;
-const negLightHeight = 50; // 70
-const nameTextHeight = 50; // 20
-const playerSpawnHeight = 100; // 20
+var snapNegLight = false;
+const negLightHeight = 50;
+const nameTextHeight = 50;
+const playerSpawnHeight = 100;
 
 const game = new Phaser.Game(config);
 
@@ -134,8 +135,8 @@ function create() {
   // Text and Buttons
   const nameText = this.add.text((player.x - 110), (player.y - nameTextHeight), "Keith Leon", 
   { fontFamily: 'Cambria, Cochin, Georgia, Times, "Times New Roman", serif', 
-  color: '#ffffff',
-  fontSize: '45px' 
+    color: '#ffffff',
+    fontSize: '45px' 
   })
 
   const gitBut = this.add.image((nameText.x + (nameText.width / 2)), (nameText.y - 20), 'gitBut');
@@ -175,24 +176,26 @@ function update(){
   // Controls event handlers
   // "Attach" neglight to player
   if (cursors.left.isDown ||  wasd.a.isDown || 
-    ((this.input.activePointer.isDown && (this.input.activePointer.x < player.x)) && (this.input.activePointer.x < deadZone[0] || this.input.activePointer.x > deadZone[1]))
-    )
+    ((this.input.activePointer.isDown && (this.input.activePointer.x < player.x)) && 
+    (this.input.activePointer.x < deadZone[0] || this.input.activePointer.x > deadZone[1])))
   {
     flickerTimer.paused = true;
+    snapNegLight = true;
 
-    neglight.x = player.x - 20;
+    neglight.x = player.x + 15;
     neglight.y = player.y - negLightHeight;
 
     player.setVelocityX(-160);
     player.anims.play('left', true);
   }
   else if (cursors.right.isDown || wasd.d.isDown || 
-    ((this.input.activePointer.isDown && (this.input.activePointer.x > player.x)) && (this.input.activePointer.x < deadZone[0] || this.input.activePointer.x > deadZone[1]))
-    )
+    ((this.input.activePointer.isDown && (this.input.activePointer.x > player.x)) && 
+    (this.input.activePointer.x < deadZone[0] || this.input.activePointer.x > deadZone[1])))
   {
     flickerTimer.paused = true;
+    snapNegLight = true;
 
-    neglight.x = player.x + 20;
+    neglight.x = player.x - 15;
     neglight.y = player.y - negLightHeight;
 
     player.setVelocityX(160);
@@ -202,15 +205,22 @@ function update(){
   {
     flickerTimer.paused = false;
 
+    if(snapNegLight){
+      neglight.x = player.x - 5;
+      neglight.y = player.y - negLightHeight;
+      snapNegLight = false;
+    }
+
     ellipse.x = player.x - 5;
     ellipse.y = player.y - negLightHeight;
 
     player.setVelocityX(0);
-    // player.anims.play('turn', true);
     player.anims.play('idle', true);
   }
   
-  if ((cursors.up.isDown || wasd.w.isDown || (this.input.activePointer.isDown && shouldJump && this.input.activePointer.y < player.y - 30)) && player.body.touching.down)
+  if ((cursors.up.isDown || wasd.w.isDown || 
+    (this.input.activePointer.isDown && shouldJump && this.input.activePointer.y < player.y - 30)) && 
+    player.body.touching.down)
   {
     flickerTimer.paused = true;
 
