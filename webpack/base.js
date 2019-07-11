@@ -20,10 +20,6 @@ module.exports = {
         test: [/\.vert$/, /\.frag$/],
         use: "raw-loader"
       },
-      // {
-      //   test: /\.(gif|png|jpe?g|svg|xml)$/i,
-      //   use: "file-loader"
-      // },
       {
         test:/\.(s*)css$/,
         use:['style-loader','css-loader', 'sass-loader']
@@ -47,6 +43,11 @@ module.exports = {
         context: path.join(__dirname, '../src'),
         from: 'assets',
         to: 'assets'
+      },
+      {
+        context: path.join(__dirname, '../'),
+        from: 'public',
+        to: ''
       }
     ])
   ]
