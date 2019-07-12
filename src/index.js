@@ -43,7 +43,7 @@ var ellipse;
 var flickerTimer;
 var snapNegLight = false;
 const negLightHeight = 50;
-const nameTextHeight = 50;
+const nameTextHeight = 145;
 const playerSpawnHeight = 49;
 
 const game = new Phaser.Game(config);
@@ -133,7 +133,7 @@ function create() {
   });
 
   // Text and Buttons
-  const nameText = this.add.text((player.x - 110), (player.y - nameTextHeight), "Keith Leon", 
+  const nameText = this.add.text((player.x - 110), (ground.y - nameTextHeight), "Keith Leon", 
   { fontFamily: 'Cambria, Cochin, Georgia, Times, "Times New Roman", serif', 
     color: '#ffffff',
     fontSize: '45px' 
