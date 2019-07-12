@@ -41,6 +41,7 @@ var wasd;
 var neglight;
 var ellipse;
 var flickerTimer;
+var keyImages = {};
 var snapNegLight = false;
 const negLightHeight = 50;
 const nameTextHeight = 145;
@@ -55,6 +56,8 @@ function preload() {
   this.load.image('linkBut', 'linkedin-logo.png');
   this.load.image('gitBut', 'github-logo.png');
   this.load.image('envBut', 'envelope.png');
+  this.load.image('leftKeyImg', 'left_key.png');
+  this.load.image('rightKeyImg', 'right_key.png');
   this.load.atlas({key: 'player', textureURL: 'sprite.png', atlasURL: 'sprite.json'});
   this.load.image('ground', 'ground.png');
 }
@@ -82,7 +85,6 @@ function create() {
   player = this.physics.add.sprite(game.scale.width/2, (ground.y-playerSpawnHeight), 'player');
   player.setCollideWorldBounds(true);
   this.physics.add.collider(player, ground);
-  // player.setSize(33, 91)
 
   // Scale Negative Light to Player Sprite
   neglight.displayWidth = (player.width * 10);
@@ -159,6 +161,40 @@ function create() {
     if(!pointer.rightButtonDown())
       window.location.href = 'mailto:keithileon@gmail.com';
   })
+
+  // Control prompt images & Animations
+  keyImages.leftKeyImg = this.add.image(gitBut.x - 50, (ground.y + 100), 'leftKeyImg').setScale(.1);
+  keyImages.leftKeyMovTween = this.tweens.add({
+    targets: keyImages.leftKeyImg,
+    x: '-=40',
+    ease: 'Cubic', // 'Cubic', 'Elastic', 'Bounce', 'Back', 'Linear', Power2
+    duration: 1150,
+    repeat: -1,
+    yoyo: true
+  });
+
+  keyImages.rightKeyImg = this.add.image(gitBut.x + 50, (ground.y + 100), 'rightKeyImg').setScale(.1);
+  keyImages.rightKeyTween = this.tweens.add({
+    targets: keyImages.rightKeyImg,
+    x: '+=40',
+    ease: 'Cubic',
+    duration: 1150,
+    repeat: -1,
+    yoyo: true
+  });
+
+  keyImages.keyFadeTween = this.tweens.add({
+    targets: [keyImages.leftKeyImg, keyImages.rightKeyImg], 
+    ease: 'Power2',
+    delay: 0,
+    alpha: 0,
+    repeat: 0,
+    paused: true,
+    onComplete: () => {
+      keyImages.leftKeyImg.destroy(true);
+      keyImages.rightKeyImg.destroy(true);
+    }
+  });
 }
 
 function update(){
@@ -167,10 +203,15 @@ function update(){
 
   var pointerAngle  = Phaser.Math.RadToDeg(Phaser.Math.Angle.Between(this.input.activePointer.x, this.input.activePointer.y, player.x, player.y));
 
-  if(pointerAngle >= 45 && pointerAngle <= 145){
+  if(pointerAngle >= 35 && pointerAngle <= 155){
     var shouldJump = true;
   }else{
     var shouldJump = false;
+  }
+
+  // Remove controls prompt after playermoves
+  if(player.body.velocity.x > 0 || player.body.velocity.x < 0){
+    keyImages.keyFadeTween.resume();
   }
 
   // Controls event handlers
