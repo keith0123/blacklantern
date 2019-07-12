@@ -44,7 +44,7 @@ var flickerTimer;
 var snapNegLight = false;
 const negLightHeight = 50;
 const nameTextHeight = 50;
-const playerSpawnHeight = 100;
+const playerSpawnHeight = 49;
 
 const game = new Phaser.Game(config);
 
