@@ -13,7 +13,7 @@
     "url": "https://github.com/keithleon/keithileon.com"
   },
   "author": "Keith Leon",
-  "homepage": "https://keithleon.github.io/keithileon",
+  "homepage": "https://keithileon.com",
   "devDependencies": {
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.2.3",
