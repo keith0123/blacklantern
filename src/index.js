@@ -67,6 +67,9 @@ function preload() {
 
 function create() {
 
+  // manually set value to work around bug
+  this.cameras.main.backgroundColor.setTo(255,255,255);
+
   // Negative Light
   neglight = this.add.image(game.scale.width/2, game.scale.height/1.63, 'neglight');
     
@@ -90,14 +93,40 @@ function create() {
   this.physics.add.collider(player, ground);
   player.setDepth(2);
 
-  // pedestal
-  pedestal = this.add.image(player.x - 150, ground.y - 15, 'pedestal');
-  pedestal.setDepth(1);
-
   // mask
   mask = this.add.image(neglight.x, neglight.y, 'neglight').setVisible(false);
   mask.setScale(.75);
-  pedestal.mask = new Phaser.Display.Masks.BitmapMask(this, mask);
+
+  // pedestal
+  pedestal = this.physics.add.image(player.x - 150, ground.y - 15, 'pedestal');
+  pedestal.body.setSize(100);
+  pedestal.body.setAllowGravity(false);
+  pedestal.body.moves = false;
+  var pedMask = new Phaser.Display.Masks.BitmapMask(this, mask);
+  pedestal.mask = pedMask;
+  pedestal.setDepth(1);
+  var pedOverlap = this.physics.add.overlap(player, pedestal, pedSwitch, null, this);
+  
+  function pedSwitch (player, pedestal) {
+    pedestal.setInteractive();
+  }
+  
+  pedestal.on('overlapend', ()=>{
+    pedestal.disableInteractive();
+  });
+
+  pedestal.setInteractive({ useHandCursor: true })
+  .on('pointerdown', (pointer) =>{
+    if(!pointer.rightButtonDown()){
+      if(this.cameras.main.backgroundColor.rgba == 'rgba(0,0,0,0)' || this.cameras.main.backgroundColor.rgba == 'rgba(0,0,0,1)'){
+        this.cameras.main.backgroundColor.setTo(255,255,255);
+        pedestal.mask = pedMask;
+      }else{
+        this.cameras.main.backgroundColor.setTo(0,0,0);
+        pedestal.clearMask();
+      }
+    }
+  });
 
   // Scale Negative Light to Player Sprite
   neglight.displayWidth = (player.width * 10);
@@ -223,6 +252,20 @@ function update(){
     var shouldJump = true;
   }else{
     var shouldJump = false;
+  }
+
+  // pedestal
+
+    // Treat 'embedded' as 'touching' also
+  if (pedestal.body.embedded){
+    pedestal.body.touching.none = false;
+  }
+
+  var touching = !pedestal.body.touching.none;
+  var wasTouching = !pedestal.body.wasTouching.none;
+  
+  if (!touching && wasTouching){
+    pedestal.emit("overlapend");
   }
 
   // Remove controls prompt after playermoves
