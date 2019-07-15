@@ -43,6 +43,8 @@ var ellipse;
 var flickerTimer;
 var keyImages = {};
 var snapNegLight = false;
+var pedestal;
+var mask;
 const negLightHeight = 50;
 const nameTextHeight = 145;
 const playerSpawnHeight = 49;
@@ -60,6 +62,7 @@ function preload() {
   this.load.image('rightKeyImg', 'right_key.png');
   this.load.atlas({key: 'player', textureURL: 'sprite.png', atlasURL: 'sprite.json'});
   this.load.image('ground', 'ground.png');
+  this.load.image('pedestal', 'pedestal.png');
 }
 
 function create() {
@@ -85,6 +88,16 @@ function create() {
   player = this.physics.add.sprite(game.scale.width/2, (ground.y-playerSpawnHeight), 'player');
   player.setCollideWorldBounds(true);
   this.physics.add.collider(player, ground);
+  player.setDepth(2);
+
+  // pedestal
+  pedestal = this.add.image(player.x - 150, ground.y - 15, 'pedestal');
+  pedestal.setDepth(1);
+
+  // mask
+  mask = this.add.image(neglight.x, neglight.y, 'neglight').setVisible(false);
+  mask.setScale(.75);
+  pedestal.mask = new Phaser.Display.Masks.BitmapMask(this, mask);
 
   // Scale Negative Light to Player Sprite
   neglight.displayWidth = (player.width * 10);
@@ -163,7 +176,7 @@ function create() {
   })
 
   // Control prompt images & Animations
-  keyImages.leftKeyImg = this.add.image(gitBut.x - 50, (ground.y + 100), 'leftKeyImg').setScale(.1);
+  keyImages.leftKeyImg = this.add.image(gitBut.x - 50, (ground.y + 100), 'leftKeyImg');
   keyImages.leftKeyMovTween = this.tweens.add({
     targets: keyImages.leftKeyImg,
     x: '-=40',
@@ -173,7 +186,7 @@ function create() {
     yoyo: true
   });
 
-  keyImages.rightKeyImg = this.add.image(gitBut.x + 50, (ground.y + 100), 'rightKeyImg').setScale(.1);
+  keyImages.rightKeyImg = this.add.image(gitBut.x + 50, (ground.y + 100), 'rightKeyImg');
   keyImages.rightKeyTween = this.tweens.add({
     targets: keyImages.rightKeyImg,
     x: '+=40',
@@ -198,6 +211,9 @@ function create() {
 }
 
 function update(){
+
+  mask.x = neglight.x;
+  mask.y = neglight.y;
 
   var deadZone = [player.x-20, player.x+20];
 
