@@ -72,6 +72,7 @@ function create() {
 
   // Negative Light
   neglight = this.add.image(game.scale.width/2, game.scale.height/1.63, 'neglight');
+  neglight.setDepth(1);
     
   // Ground
   if(window.matchMedia("(max-height: 399px)").matches){
@@ -91,20 +92,20 @@ function create() {
   player = this.physics.add.sprite(game.scale.width/2, (ground.y-playerSpawnHeight), 'player');
   player.setCollideWorldBounds(true);
   this.physics.add.collider(player, ground);
-  player.setDepth(2);
+  player.setDepth(3);
 
   // mask
   mask = this.add.image(neglight.x, neglight.y, 'neglight').setVisible(false);
   mask.setScale(.75);
 
   // pedestal
-  pedestal = this.physics.add.sprite(player.x - 150, ground.y - 15, 'pedestal');
+  pedestal = this.physics.add.sprite(player.x - 150, ground.y - 19, 'pedestal');
   var pedMask = new Phaser.Display.Masks.BitmapMask(this, mask);
   pedestal.mask = pedMask;
   pedestal.body.setSize(100);
   pedestal.body.setAllowGravity(false);
   pedestal.body.moves = false;
-  pedestal.setDepth(1);
+  pedestal.setDepth(2);
   var pedOverlap = this.physics.add.overlap(player, pedestal, pedSwitch, null, this);
   
   function pedSwitch (player, pedestal) {
@@ -122,9 +123,13 @@ function create() {
       || this.cameras.main.backgroundColor.rgba == 'rgba(0,0,0,1)'){
         this.cameras.main.backgroundColor.setTo(255,255,255);
         pedestal.mask = pedMask;
+        summaryText.setVisible(false);
+        titleText.setVisible(false);
       }else{
         this.cameras.main.backgroundColor.setTo(0,0,0);
         pedestal.clearMask();
+        summaryText.setVisible(true);
+        titleText.setVisible(true);
       }
       pedestal.anims.play('pedActivate');
     }
@@ -189,26 +194,26 @@ function create() {
   { fontFamily: 'Cambria, Cochin, Georgia, Times, "Times New Roman", serif', 
     color: '#ffffff',
     fontSize: '45px' 
-  })
+  }).setDepth(2);
 
-  const titleText = this.add.text( nameText.getCenter().x, (nameText.y - 200), "Futurist & Developer", 
+  const titleText = this.add.text( nameText.getCenter().x, (nameText.y - 85), "Futurist & Developer", 
   { fontFamily: 'Cambria, Cochin, Georgia, Times, "Times New Roman", serif', 
     color: '#ffffff',
     fontSize: '30px' 
-  })
+  }).setVisible(false).setDepth(2);
   titleText.x = (nameText.getCenter().x - titleText.width/2);
 
   const text = [
-    "I’m a self-motivated generalist",
+    "  I’m a self-motivated generalist",
     "who converts coffee & ideas into",
-    "into practical, scalable solutions."
+    "    practical, scalable solutions."
   ]
-  const summaryText = this.add.text((player.x - 60), (nameText.y + 250), 
+  const summaryText = this.add.text((player.x - 60), (nameText.y + 145), 
   text, 
   { fontFamily: 'Cambria, Cochin, Georgia, Times, "Times New Roman", serif', 
     color: '#ffffff',
-    fontSize: '20px',
-  }).setLineSpacing(10);
+    fontSize: '15px',
+  }).setLineSpacing(10).setVisible(false).setDepth(2);;
   summaryText.x = (nameText.getCenter().x - summaryText.width/2);
 
   const gitBut = this.add.image((nameText.x + (nameText.width / 2)), (nameText.y - 20), 'gitBut');
@@ -216,24 +221,25 @@ function create() {
   .on('pointerdown', (pointer) =>{
     if(!pointer.rightButtonDown())
       window.location.href = 'https://github.com/keithleon';
-  })
+  }).setDepth(2);
 
   const linkBut = this.add.image(gitBut.x - 40, (nameText.y - 20), 'linkBut');
   linkBut.setInteractive({ useHandCursor: true })
   .on('pointerdown', (pointer) =>{
     if(!pointer.rightButtonDown())
       window.location.href = 'https://www.linkedin.com/in/keith-leon/';
-  })
+  }).setDepth(2);
 
   const envBut = this.add.image(gitBut.x + 40, (nameText.y - 20), 'envBut');
   envBut.setInteractive({ useHandCursor: true })
   .on('pointerdown', (pointer) =>{
     if(!pointer.rightButtonDown())
       window.location.href = 'mailto:keithileon@gmail.com';
-  })
+  }).setDepth(2);
 
   // Control prompt images & Animations
-  keyImages.leftKeyImg = this.add.image(gitBut.x - 50, (ground.y + 100), 'leftKeyImg');
+  keyImages.leftKeyImg = this.add.image(gitBut.x - 40, (ground.y + 30), 'leftKeyImg');
+  keyImages.leftKeyImg.setDepth(3);
   keyImages.leftKeyMovTween = this.tweens.add({
     targets: keyImages.leftKeyImg,
     x: '-=40',
@@ -243,7 +249,8 @@ function create() {
     yoyo: true
   });
 
-  keyImages.rightKeyImg = this.add.image(gitBut.x + 50, (ground.y + 100), 'rightKeyImg');
+  keyImages.rightKeyImg = this.add.image(gitBut.x + 40, (ground.y + 30), 'rightKeyImg');
+  keyImages.rightKeyImg.setDepth(3);
   keyImages.rightKeyTween = this.tweens.add({
     targets: keyImages.rightKeyImg,
     x: '+=40',
