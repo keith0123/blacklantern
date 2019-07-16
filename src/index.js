@@ -62,7 +62,7 @@ function preload() {
   this.load.image('rightKeyImg', 'right_key.png');
   this.load.atlas({key: 'player', textureURL: 'sprite.png', atlasURL: 'sprite.json'});
   this.load.image('ground', 'ground.png');
-  this.load.image('pedestal', 'pedestal.png');
+  this.load.atlas({key: 'pedestal', textureURL: 'pedestal.png', atlasURL: 'pedestal.json'});
 }
 
 function create() {
@@ -98,12 +98,12 @@ function create() {
   mask.setScale(.75);
 
   // pedestal
-  pedestal = this.physics.add.image(player.x - 150, ground.y - 15, 'pedestal');
+  pedestal = this.physics.add.sprite(player.x - 150, ground.y - 15, 'pedestal');
+  var pedMask = new Phaser.Display.Masks.BitmapMask(this, mask);
+  pedestal.mask = pedMask;
   pedestal.body.setSize(100);
   pedestal.body.setAllowGravity(false);
   pedestal.body.moves = false;
-  var pedMask = new Phaser.Display.Masks.BitmapMask(this, mask);
-  pedestal.mask = pedMask;
   pedestal.setDepth(1);
   var pedOverlap = this.physics.add.overlap(player, pedestal, pedSwitch, null, this);
   
@@ -118,13 +118,15 @@ function create() {
   pedestal.setInteractive({ useHandCursor: true })
   .on('pointerdown', (pointer) =>{
     if(!pointer.rightButtonDown()){
-      if(this.cameras.main.backgroundColor.rgba == 'rgba(0,0,0,0)' || this.cameras.main.backgroundColor.rgba == 'rgba(0,0,0,1)'){
+      if(this.cameras.main.backgroundColor.rgba == 'rgba(0,0,0,0)' 
+      || this.cameras.main.backgroundColor.rgba == 'rgba(0,0,0,1)'){
         this.cameras.main.backgroundColor.setTo(255,255,255);
         pedestal.mask = pedMask;
       }else{
         this.cameras.main.backgroundColor.setTo(0,0,0);
         pedestal.clearMask();
       }
+      pedestal.anims.play('pedActivate');
     }
   });
 
@@ -171,9 +173,15 @@ function create() {
 
   this.anims.create({
     key: 'idle',
-    frames: this.anims.generateFrameNames('player', {prefix: 'sprite_idle ',start: 0, end: 5}),
+    frames: this.anims.generateFrameNames('player', {prefix: 'sprite_idle ', start: 0, end: 5}),
     frameRate: 2.5,
     repeat: -1
+  });
+
+  this.anims.create({
+    key: 'pedActivate',
+    frames: this.anims.generateFrameNumbers('pedestal', {start: 3, end: 0}),
+    frameRate: 10,
   });
 
   // Text and Buttons
@@ -182,6 +190,26 @@ function create() {
     color: '#ffffff',
     fontSize: '45px' 
   })
+
+  const titleText = this.add.text( nameText.getCenter().x, (nameText.y - 200), "Futurist & Developer", 
+  { fontFamily: 'Cambria, Cochin, Georgia, Times, "Times New Roman", serif', 
+    color: '#ffffff',
+    fontSize: '30px' 
+  })
+  titleText.x = (nameText.getCenter().x - titleText.width/2);
+
+  const text = [
+    "I’m a self-motivated generalist",
+    "who converts coffee & ideas into",
+    "into practical, scalable solutions."
+  ]
+  const summaryText = this.add.text((player.x - 60), (nameText.y + 250), 
+  text, 
+  { fontFamily: 'Cambria, Cochin, Georgia, Times, "Times New Roman", serif', 
+    color: '#ffffff',
+    fontSize: '20px',
+  }).setLineSpacing(10);
+  summaryText.x = (nameText.getCenter().x - summaryText.width/2);
 
   const gitBut = this.add.image((nameText.x + (nameText.width / 2)), (nameText.y - 20), 'gitBut');
   gitBut.setInteractive({ useHandCursor: true })

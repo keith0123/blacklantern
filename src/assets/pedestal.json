@@ -1,0 +1,51 @@
+{ "frames": {
+   "0": {
+    "frame": { "x": 0, "y": 0, "w": 29, "h": 28 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 29, "h": 28 },
+    "sourceSize": { "w": 29, "h": 28 },
+    "duration": 100
+   },
+   "1": {
+    "frame": { "x": 29, "y": 0, "w": 29, "h": 28 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 29, "h": 28 },
+    "sourceSize": { "w": 29, "h": 28 },
+    "duration": 100
+   },
+   "2": {
+    "frame": { "x": 58, "y": 0, "w": 29, "h": 28 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 29, "h": 28 },
+    "sourceSize": { "w": 29, "h": 28 },
+    "duration": 100
+   },
+   "3": {
+    "frame": { "x": 87, "y": 0, "w": 29, "h": 28 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 29, "h": 28 },
+    "sourceSize": { "w": 29, "h": 28 },
+    "duration": 100
+   }
+ },
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.2.13-x64",
+  "image": "pedestal.png",
+  "format": "RGBA8888",
+  "size": { "w": 116, "h": 28 },
+  "scale": "1",
+  "frameTags": [
+  ],
+  "layers": [
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" },
+   { "name": "Layer 2", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}
