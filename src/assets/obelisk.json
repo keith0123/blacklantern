@@ -1,0 +1,115 @@
+{ "frames": {
+   "obelisk_activation 0": {
+    "frame": { "x": 0, "y": 0, "w": 40, "h": 70 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 40, "h": 70 },
+    "sourceSize": { "w": 40, "h": 70 },
+    "duration": 200
+   },
+   "obelisk_activation 1": {
+    "frame": { "x": 40, "y": 0, "w": 40, "h": 70 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 40, "h": 70 },
+    "sourceSize": { "w": 40, "h": 70 },
+    "duration": 200
+   },
+   "obelisk_activation 2": {
+    "frame": { "x": 80, "y": 0, "w": 40, "h": 70 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 40, "h": 70 },
+    "sourceSize": { "w": 40, "h": 70 },
+    "duration": 200
+   },
+   "obelisk_activation 3": {
+    "frame": { "x": 120, "y": 0, "w": 40, "h": 70 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 40, "h": 70 },
+    "sourceSize": { "w": 40, "h": 70 },
+    "duration": 200
+   },
+   "obelisk_activation 4": {
+    "frame": { "x": 160, "y": 0, "w": 40, "h": 70 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 40, "h": 70 },
+    "sourceSize": { "w": 40, "h": 70 },
+    "duration": 200
+   },
+   "obelisk_activation 5": {
+    "frame": { "x": 200, "y": 0, "w": 40, "h": 70 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 40, "h": 70 },
+    "sourceSize": { "w": 40, "h": 70 },
+    "duration": 200
+   },
+   "obelisk_activation 6": {
+    "frame": { "x": 0, "y": 70, "w": 40, "h": 70 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 40, "h": 70 },
+    "sourceSize": { "w": 40, "h": 70 },
+    "duration": 200
+   },
+   "obelisk_activation 7": {
+    "frame": { "x": 40, "y": 70, "w": 40, "h": 70 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 40, "h": 70 },
+    "sourceSize": { "w": 40, "h": 70 },
+    "duration": 200
+   },
+   "obelisk_activation 8": {
+    "frame": { "x": 80, "y": 70, "w": 40, "h": 70 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 40, "h": 70 },
+    "sourceSize": { "w": 40, "h": 70 },
+    "duration": 200
+   },
+   "obelisk_idle 0": {
+    "frame": { "x": 120, "y": 70, "w": 40, "h": 70 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 40, "h": 70 },
+    "sourceSize": { "w": 40, "h": 70 },
+    "duration": 200
+   },
+   "obelisk_idle 1": {
+    "frame": { "x": 160, "y": 70, "w": 40, "h": 70 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 40, "h": 70 },
+    "sourceSize": { "w": 40, "h": 70 },
+    "duration": 200
+   },
+   "obelisk_idle 2": {
+    "frame": { "x": 200, "y": 70, "w": 40, "h": 70 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 40, "h": 70 },
+    "sourceSize": { "w": 40, "h": 70 },
+    "duration": 200
+   },
+   "obelisk_idle 3": {
+    "frame": { "x": 0, "y": 140, "w": 40, "h": 70 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 40, "h": 70 },
+    "sourceSize": { "w": 40, "h": 70 },
+    "duration": 200
+   }
+ },
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.2.13-x64",
+  "image": "obelisk.png",
+  "format": "RGBA8888",
+  "size": { "w": 256, "h": 256 },
+  "scale": "1"
+ }
+}

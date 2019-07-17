@@ -43,7 +43,7 @@ var ellipse;
 var flickerTimer;
 var keyImages = {};
 var snapNegLight = false;
-var pedestal;
+var obelisks = {};
 var mask;
 const negLightHeight = 50;
 const nameTextHeight = 145;
@@ -62,19 +62,19 @@ function preload() {
   this.load.image('rightKeyImg', 'right_key.png');
   this.load.atlas({key: 'player', textureURL: 'sprite.png', atlasURL: 'sprite.json'});
   this.load.image('ground', 'ground.png');
-  this.load.atlas({key: 'pedestal', textureURL: 'pedestal.png', atlasURL: 'pedestal.json'});
+  this.load.atlas({key: 'obelisk', textureURL: 'obelisk.png', atlasURL: 'obelisk.json'});
 }
 
 function create() {
 
-  // manually set value to work around bug
+    // manually set value to work around bug
   this.cameras.main.backgroundColor.setTo(255,255,255);
 
-  // Negative Light
+  //==== Negative Light
   neglight = this.add.image(game.scale.width/2, game.scale.height/1.63, 'neglight');
   neglight.setDepth(1);
     
-  // Ground
+  //==== Ground
   if(window.matchMedia("(max-height: 399px)").matches){
     ground = this.physics.add.staticSprite(game.scale.width/2, game.scale.height/1.33, 'ground');
   }else if(window.matchMedia("(max-height: 799px)").matches){
@@ -88,58 +88,119 @@ function create() {
   ground.displayWidth = game.scale.width;
   ground.refreshBody();
 
-  // Player
-  player = this.physics.add.sprite(game.scale.width/2, (ground.y-playerSpawnHeight), 'player');
+  //==== Player
+  player = this.physics.add.sprite(game.scale.width/2 + 5, (ground.y-playerSpawnHeight), 'player');
   player.setCollideWorldBounds(true);
   this.physics.add.collider(player, ground);
   player.setDepth(3);
 
-  // mask
+    // Scale Negative Light to Player Sprite
+  neglight.displayWidth = (player.width * 10);
+  neglight.displayHeight = neglight.displayWidth;  
+
+  //==== mask
   mask = this.add.image(neglight.x, neglight.y, 'neglight').setVisible(false);
   mask.setScale(.75);
+  var obeliskMask = new Phaser.Display.Masks.BitmapMask(this, mask);
 
-  // pedestal
-  pedestal = this.physics.add.sprite(player.x - 150, ground.y - 19, 'pedestal');
-  var pedMask = new Phaser.Display.Masks.BitmapMask(this, mask);
-  pedestal.mask = pedMask;
-  pedestal.body.setSize(100);
-  pedestal.body.setAllowGravity(false);
-  pedestal.body.moves = false;
-  pedestal.setDepth(2);
-  var pedOverlap = this.physics.add.overlap(player, pedestal, pedSwitch, null, this);
-  
-  function pedSwitch (player, pedestal) {
-    pedestal.setInteractive();
-  }
-  
-  pedestal.on('overlapend', ()=>{
-    pedestal.disableInteractive();
+  //==== Obelisks
+  obelisks.tweens = {};
+
+  obelisks.tweens.white = this.tweens.add({
+    targets: obelisks, 
+    completeDelay: 900,
+    repeat: 0,
+    paused: true,
+    onComplete: () => {
+      this.cameras.main.backgroundColor.setTo(255,255,255);
+      obelisks.obelisk0.sprite.mask = obeliskMask;
+      obelisks.obelisk1.sprite.mask = obeliskMask;
+      summaryText.setVisible(false);
+      titleText.setVisible(false);
+    }
   });
 
-  pedestal.setInteractive({ useHandCursor: true })
+  obelisks.tweens.black = this.tweens.add({
+    targets: obelisks, 
+    completeDelay: 900,
+    repeat: 0,
+    paused: true,
+    onComplete: () => {
+      this.cameras.main.backgroundColor.setTo(0,0,0);
+      obelisks.obelisk0.sprite.clearMask();
+      obelisks.obelisk1.sprite.clearMask();
+      summaryText.setVisible(true);
+      titleText.setVisible(true);
+    }
+  });
+
+    // obelisk0
+  obelisks.obelisk0 = {};
+
+  obelisks.obelisk0.sprite = this.physics.add.sprite(player.x - 150, ground.y - 40, 'obelisk');
+  obelisks.obelisk0.sprite.mask = obeliskMask;
+  obelisks.obelisk0.sprite.body.setSize(100);
+  obelisks.obelisk0.sprite.body.setAllowGravity(false);
+  obelisks.obelisk0.sprite.body.moves = false;
+  obelisks.obelisk0.sprite.setDepth(2);
+  this.physics.add.overlap(player, obelisks.obelisk0.sprite, obelisk0Switch, null, this);
+  
+  function obelisk0Switch (player, obelisk) {
+    obelisks.obelisk0.sprite.setInteractive();
+  }
+  
+  obelisks.obelisk0.sprite.on('overlapend', ()=>{
+    obelisks.obelisk0.sprite.disableInteractive();
+  });
+
+  obelisks.obelisk0.sprite.setInteractive({ useHandCursor: true })
   .on('pointerdown', (pointer) =>{
     if(!pointer.rightButtonDown()){
       if(this.cameras.main.backgroundColor.rgba == 'rgba(0,0,0,0)' 
       || this.cameras.main.backgroundColor.rgba == 'rgba(0,0,0,1)'){
-        this.cameras.main.backgroundColor.setTo(255,255,255);
-        pedestal.mask = pedMask;
-        summaryText.setVisible(false);
-        titleText.setVisible(false);
+        obelisks.obelisk0.sprite.anims.play('obeliskActivate');
+        obelisks.tweens.white.play();
       }else{
-        this.cameras.main.backgroundColor.setTo(0,0,0);
-        pedestal.clearMask();
-        summaryText.setVisible(true);
-        titleText.setVisible(true);
+        obelisks.obelisk0.sprite.anims.play('obeliskActivate');
+        obelisks.tweens.black.play();
       }
-      pedestal.anims.play('pedActivate');
     }
   });
 
-  // Scale Negative Light to Player Sprite
-  neglight.displayWidth = (player.width * 10);
-  neglight.displayHeight = neglight.displayWidth;
+    // obelisks1
+  obelisks.obelisk1 = {};
 
-  // Flicker Effect
+  obelisks.obelisk1.sprite = this.physics.add.sprite(player.x + 140, ground.y - 40, 'obelisk');
+  obelisks.obelisk1.sprite.mask = obeliskMask;
+  obelisks.obelisk1.sprite.body.setSize(100);
+  obelisks.obelisk1.sprite.body.setAllowGravity(false);
+  obelisks.obelisk1.sprite.body.moves = false;
+  obelisks.obelisk1.sprite.setDepth(2);
+  this.physics.add.overlap(player, obelisks.obelisk1.sprite, obelisk1Switch, null, this);
+    
+  function obelisk1Switch (player, obelisk) {
+    obelisks.obelisk1.sprite.setInteractive();
+  }
+    
+  obelisks.obelisk1.sprite.on('overlapend', ()=>{
+    obelisks.obelisk1.sprite.disableInteractive();
+  });
+  
+  obelisks.obelisk1.sprite.setInteractive({ useHandCursor: true })
+  .on('pointerdown', (pointer) =>{
+    if(!pointer.rightButtonDown()){
+      if(this.cameras.main.backgroundColor.rgba == 'rgba(0,0,0,0)' 
+      || this.cameras.main.backgroundColor.rgba == 'rgba(0,0,0,1)'){
+        obelisks.obelisk1.sprite.anims.play('obeliskActivate');
+        obelisks.tweens.white.play();
+      }else{
+        obelisks.obelisk1.sprite.anims.play('obeliskActivate');
+        obelisks.tweens.black.play();
+      }
+    }
+  });
+
+  //==== Flicker Effect
   ellipse = new Phaser.Geom.Ellipse(neglight.x, neglight.y, 5, 5);
   flickerTimer = this.time.addEvent({
     delay: 300,
@@ -151,7 +212,7 @@ function create() {
     repeat: -1
   });
 
-  // Controls
+  //==== Controls
   cursors = this.input.keyboard.createCursorKeys();
 
   wasd = {
@@ -161,7 +222,7 @@ function create() {
     'd': this.input.keyboard.addKey('D')
   }
 
-  // Animations
+  //==== Animations
   this.anims.create({
     key: 'left',
     frames: this.anims.generateFrameNames('player', {prefix:'sprite_run_l ', start: 0, end: 5}),
@@ -184,12 +245,20 @@ function create() {
   });
 
   this.anims.create({
-    key: 'pedActivate',
-    frames: this.anims.generateFrameNumbers('pedestal', {start: 3, end: 0}),
+    key: 'obeliskActivate',
+    frames: this.anims.generateFrameNames('obelisk', {prefix: 'obelisk_activation ', start: 0, end: 8}),
     frameRate: 10,
   });
 
-  // Text and Buttons
+  this.anims.create({
+    key: 'obeliskIdle',
+    frames: this.anims.generateFrameNames('obelisk', {prefix: 'obelisk_idle ', start: 0, end: 3}),
+    frameRate: 4,
+    yoyo: true,
+    repeat: -1
+  });
+
+  //==== Text and Buttons
   const nameText = this.add.text((player.x - 110), (ground.y - nameTextHeight), "Keith Leon", 
   { fontFamily: 'Cambria, Cochin, Georgia, Times, "Times New Roman", serif', 
     color: '#ffffff',
@@ -237,19 +306,19 @@ function create() {
       window.location.href = 'mailto:keithileon@gmail.com';
   }).setDepth(2);
 
-  // Control prompt images & Animations
-  keyImages.leftKeyImg = this.add.image(gitBut.x - 40, (ground.y + 30), 'leftKeyImg');
+  //==== Control prompt images & Animations
+  keyImages.leftKeyImg = this.add.image(gitBut.x - 30, (ground.y + 15), 'leftKeyImg');
   keyImages.leftKeyImg.setDepth(3);
   keyImages.leftKeyMovTween = this.tweens.add({
     targets: keyImages.leftKeyImg,
     x: '-=40',
-    ease: 'Cubic', // 'Cubic', 'Elastic', 'Bounce', 'Back', 'Linear', Power2
+    ease: 'Cubic',
     duration: 1150,
     repeat: -1,
     yoyo: true
   });
 
-  keyImages.rightKeyImg = this.add.image(gitBut.x + 40, (ground.y + 30), 'rightKeyImg');
+  keyImages.rightKeyImg = this.add.image(gitBut.x + 30, (ground.y + 15), 'rightKeyImg');
   keyImages.rightKeyImg.setDepth(3);
   keyImages.rightKeyTween = this.tweens.add({
     targets: keyImages.rightKeyImg,
@@ -289,27 +358,52 @@ function update(){
     var shouldJump = false;
   }
 
-  // pedestal
+  //==== Obelisks
 
+    // Determine If Interactable
     // Treat 'embedded' as 'touching' also
-  if (pedestal.body.embedded){
-    pedestal.body.touching.none = false;
+
+    // obelisk0
+  if (obelisks.obelisk0.sprite.body.embedded){
+    obelisks.obelisk0.sprite.body.touching.none = false;
   }
 
-  var touching = !pedestal.body.touching.none;
-  var wasTouching = !pedestal.body.wasTouching.none;
+  var touching = !obelisks.obelisk0.sprite.body.touching.none;
+  var wasTouching = !obelisks.obelisk0.sprite.body.wasTouching.none;
   
   if (!touching && wasTouching){
-    pedestal.emit("overlapend");
+    obelisks.obelisk0.sprite.emit("overlapend");
   }
 
-  // Remove controls prompt after playermoves
+      // idle animation
+  if (obelisks.obelisk0.sprite.anims.getCurrentKey() === 'obeliskActivate' && obelisks.obelisk0.sprite.anims.getProgress() < 1)
+  {}
+  else{obelisks.obelisk0.sprite.anims.play('obeliskIdle', true)}
+
+    // obelisk1
+  if (obelisks.obelisk1.sprite.body.embedded){
+    obelisks.obelisk1.sprite.body.touching.none = false;
+  }
+  
+  var touching1 = !obelisks.obelisk1.sprite.body.touching.none;
+  var wasTouching1 = !obelisks.obelisk1.sprite.body.wasTouching.none;
+    
+  if (!touching1 && wasTouching1){
+    obelisks.obelisk1.sprite.emit("overlapend");
+  }
+
+      // idle animation
+  if (obelisks.obelisk1.sprite.anims.getCurrentKey() === 'obeliskActivate' && obelisks.obelisk1.sprite.anims.getProgress() < 1)
+  {}
+  else{obelisks.obelisk1.sprite.anims.play('obeliskIdle', true)}
+
+  //==== Controls event handlers & "Attach" neglight to player
+
+    // Remove controls prompt after playermoves
   if(player.body.velocity.x > 0 || player.body.velocity.x < 0){
     keyImages.keyFadeTween.resume();
   }
 
-  // Controls event handlers
-  // "Attach" neglight to player
   if (cursors.left.isDown ||  wasd.a.isDown || 
     ((this.input.activePointer.isDown && (this.input.activePointer.x < player.x)) && 
     (this.input.activePointer.x < deadZone[0] || this.input.activePointer.x > deadZone[1])))
