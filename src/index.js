@@ -60,6 +60,7 @@ function preload() {
   this.load.image('envBut', 'envelope.png');
   this.load.image('leftKeyImg', 'left_key.png');
   this.load.image('rightKeyImg', 'right_key.png');
+  this.load.image('handImg', 'hand.png');
   this.load.atlas({key: 'player', textureURL: 'sprite.png', atlasURL: 'sprite.json'});
   this.load.image('ground', 'ground.png');
   this.load.atlas({key: 'obelisk', textureURL: 'obelisk.png', atlasURL: 'obelisk.json'});
@@ -117,6 +118,8 @@ function create() {
       obelisks.obelisk1.sprite.mask = obeliskMask;
       summaryText.setVisible(false);
       titleText.setVisible(false);
+      hands.leftHand.destroy(true);
+      hands.rightHand.destroy(true);
     }
   });
 
@@ -131,6 +134,8 @@ function create() {
       obelisks.obelisk1.sprite.clearMask();
       summaryText.setVisible(true);
       titleText.setVisible(true);
+      hands.leftHand.destroy(true);
+      hands.rightHand.destroy(true);
     }
   });
 
@@ -341,6 +346,63 @@ function create() {
       keyImages.rightKeyImg.destroy(true);
     }
   });
+
+  let hands = {};
+
+  hands.rightHand = this.add.image(obelisks.obelisk1.sprite.x + 7, obelisks.obelisk1.sprite.y + 15, 'handImg');
+  hands.rightHand.setDepth(3);
+  hands.rightHand.mask = obeliskMask;
+
+  hands.rightHand.moveTween = this.tweens.add({
+    targets: hands.rightHand,
+    x: '-=5',
+    y: '-=5',
+    ease: 'Cubic',
+    duration: 1150,
+    repeat: -1,
+    yoyo: true
+  });
+
+  hands.rightHand.fadeTween = this.tweens.add({
+    targets: hands.rightHand, 
+    ease: 'Power2',
+    delay: 0,
+    alpha: 0,
+    repeat: 0,
+    paused: true,
+    onComplete: () => {
+      hands.rightHand.destroy(true);
+      hands.rightHand.destroy(true);
+    }
+  });
+
+  hands.leftHand = this.add.image(obelisks.obelisk0.sprite.x + 7, obelisks.obelisk0.sprite.y + 15, 'handImg');
+  hands.leftHand.setDepth(3);
+  hands.leftHand.mask = obeliskMask;
+
+  hands.leftHand.moveTween = this.tweens.add({
+    targets: hands.leftHand,
+    x: '-=5',
+    y: '-=5',
+    ease: 'Cubic',
+    duration: 1150,
+    repeat: -1,
+    yoyo: true
+  });
+
+  hands.leftHand.fadeTween = this.tweens.add({
+    targets: hands.leftHand, 
+    ease: 'Power2',
+    delay: 0,
+    alpha: 0,
+    repeat: 0,
+    paused: true,
+    onComplete: () => {
+      hands.leftHand.destroy(true);
+      hands.leftHand.destroy(true);
+    }
+  });
+
 }
 
 function update(){
