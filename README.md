@@ -1,5 +1,5 @@
-# keithileon.com
-Personal site for [Keith Leon](https://www.linkedin.com/in/keith-leon/)
+# Black Lamp
+Proof of concept for a portfolio site using phaser to create a web game
 
 <p align="center">
   <a href="https://keithileon.com">
