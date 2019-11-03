@@ -1,7 +1,7 @@
 {
-  "name": "keithileon.com",
+  "name": "blacklamp",
   "version": "1.3.0",
-  "description": "Personal Site for Keith Leon",
+  "description": "Proof of concept for a portfolio site using phaser to create a web game.",
   "main": "src/index.js",
   "scripts": {
     "build": "webpack --config webpack/prod.js ",
@@ -10,10 +10,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/keithleon/keithileon.com"
+    "url": "https://github.com/keithleon/blacklamp"
   },
   "author": "Keith Leon",
-  "homepage": "https://keithileon.com",
+  "homepage": "https://keithleon.github.io/blacklamp",
   "devDependencies": {
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.2.3",
