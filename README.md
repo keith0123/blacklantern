@@ -3,7 +3,7 @@ Proof of concept for a portfolio site using phaser to create a web game
 
 <p align="center">
   <a href="hhttps://keithleon.github.io/blacklamp">
-    <img src="public/android-chrome-192x192.png" alt"keithileon.com">
+    <img src="public/android-chrome-192x192.png" alt"black lamp">
   </a>
 </p>
 <p align="center">
