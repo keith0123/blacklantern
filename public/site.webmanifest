@@ -1,6 +1,6 @@
 {
-    "name": "blacklamp",
-    "short_name": "blacklamp",
+    "name": "blacklantern",
+    "short_name": "blacklantern",
     "icons": [
         {
             "src": "android-chrome-192x192.png",
@@ -14,7 +14,7 @@
         }
     ],
     "theme_color": "#ffc40d",
-    "start_url": "https://keithleon.github.io/blacklamp",
+    "start_url": "https://keithleon.github.io/blacklantern",
     "background_color": "#ffc40d",
     "display": "standalone"
 }
