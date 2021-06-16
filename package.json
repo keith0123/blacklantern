@@ -10,10 +10,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/keithleon/blacklantern"
+    "url": "https://github.com/keith0123/blacklantern"
   },
-  "author": "Keith Leon",
-  "homepage": "https://keithleon.github.io/blacklantern",
+  "author": "Keith",
+  "homepage": "https://blacklantern.klportfolio.info",
   "devDependencies": {
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.2.3",
