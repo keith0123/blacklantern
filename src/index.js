@@ -264,7 +264,7 @@ function create() {
   });
 
   //==== Text and Buttons
-  const nameText = this.add.text((player.x - 110), (ground.y - nameTextHeight), "Keith L", 
+  const nameText = this.add.text((player.x - 77), (ground.y - nameTextHeight), "Keith L", 
   { fontFamily: 'Cambria, Cochin, Georgia, Times, "Times New Roman", serif', 
     color: '#ffffff',
     fontSize: '45px' 
