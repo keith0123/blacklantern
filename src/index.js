@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import './styles/index.scss';
 
 const config = {
-  title: "Keith Leon",
+  title: "Black Lantern",
   banner: false,
   pixelArt: true,
   backgroundColor: 0xffffff,
@@ -264,7 +264,7 @@ function create() {
   });
 
   //==== Text and Buttons
-  const nameText = this.add.text((player.x - 110), (ground.y - nameTextHeight), "Keith Leon", 
+  const nameText = this.add.text((player.x - 110), (ground.y - nameTextHeight), "Keith L", 
   { fontFamily: 'Cambria, Cochin, Georgia, Times, "Times New Roman", serif', 
     color: '#ffffff',
     fontSize: '45px' 
@@ -294,21 +294,21 @@ function create() {
   gitBut.setInteractive({ useHandCursor: true })
   .on('pointerdown', (pointer) =>{
     if(!pointer.rightButtonDown())
-      window.location.href = 'https://github.com/keithleon';
+      window.location.href = 'https://github.com/keith0123';
   }).setDepth(2);
 
   const linkBut = this.add.image(gitBut.x - 40, (nameText.y - 20), 'linkBut');
   linkBut.setInteractive({ useHandCursor: true })
   .on('pointerdown', (pointer) =>{
     if(!pointer.rightButtonDown())
-      window.location.href = 'https://www.linkedin.com/in/keith-leon/';
+      window.location.href = 'https://www.linkedin.com/in/keithl-/';
   }).setDepth(2);
 
   const envBut = this.add.image(gitBut.x + 40, (nameText.y - 20), 'envBut');
   envBut.setInteractive({ useHandCursor: true })
   .on('pointerdown', (pointer) =>{
     if(!pointer.rightButtonDown())
-      window.location.href = 'mailto:keithileon@gmail.com';
+      window.location.href = 'mailto:keithil.contact@gmail.com';
   }).setDepth(2);
 
   //==== Control prompt images & Animations
