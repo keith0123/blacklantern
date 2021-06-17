@@ -7,7 +7,7 @@ Proof of concept for a portfolio site using phaser to create a web game
   </a>
 </p>
 <p align="center">
-  <a href="https://www.linkedin.com/in/keith-leon/">linkedin</a> | <a href="https://github.com/keith0123">github</a> | <a href="mailto:keithileon@gmail.com">keithileon@gmail.com</a>
+  <a href="https://www.linkedin.com/in/keithl-/">linkedin</a> | <a href="https://github.com/keith0123">github</a> | <a href="mailto:keithil.contact@gmail.com">keithil.contact@gmail.com</a>
 </p>
 
 # Usage
