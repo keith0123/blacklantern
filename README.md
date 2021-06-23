@@ -2,7 +2,7 @@
 Proof of concept for a portfolio site using phaser to create a web game
 
 <p align="center">
-  <a href="https://blacklantern.klportfolio.info">
+  <a href="https://blacklantern.keith.engineer">
     <img src="public/android-chrome-192x192.png" alt"black lantern">
   </a>
 </p>

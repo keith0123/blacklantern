@@ -13,7 +13,7 @@
     "url": "https://github.com/keith0123/blacklantern"
   },
   "author": "Keith",
-  "homepage": "https://blacklantern.klportfolio.info",
+  "homepage": "https://blacklantern.keith.engineer",
   "devDependencies": {
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.2.3",
